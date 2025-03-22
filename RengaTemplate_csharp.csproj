@@ -32,11 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Renga.NET.PluginUtility">
-      <HintPath>..\..\..\..\Downloads\RengaSDK\Net\Renga.NET.PluginUtility.dll</HintPath>
+    <Reference Include="Renga.NET.PluginUtility, Version=2.39.18140.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>G:\RengaSDK\Net\Renga.NET.PluginUtility.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AxisInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AxisInputForm.Designer.cs">
+      <DependentUpon>AxisInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="init_app.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using Renga;
+using System.Windows.Forms;
 
 namespace RengaTemplate_csharp
 {
@@ -13,17 +14,13 @@ namespace RengaTemplate_csharp
             Renga.IUIPanelExtension panel = renga_ui.CreateUIPanelExtension();
 
             Renga.IAction our_button = renga_ui.CreateAction();
-            our_button.ToolTip = "Test plugin";
-            our_button.DisplayName = "Start test message box";
-
-            Renga.IImage icon = renga_ui.CreateImage();
-            icon.LoadFromFile(pluginFolder + "\\logo.png");
-            our_button.Icon = icon;
+            our_button.ToolTip = "Axis Plugin";
+            our_button.DisplayName = "Axis Plugin";
 
             follow_action = new ActionEventSource(our_button);
             follow_action.Triggered += (sender, args) =>
             {
-                renga_ui.ShowMessageBox(MessageIcon.MessageIcon_Info, "Сообщение", "Привет, Renga!");
+                ShowAxisInputForm();
             };
 
             panel.AddToolButton(our_button);
@@ -31,6 +28,15 @@ namespace RengaTemplate_csharp
 
             return true;
         }
+
+        private void ShowAxisInputForm()
+        {
+            using (AxisInputForm form = new AxisInputForm())
+            {
+                form.ShowDialog();
+            }
+        }
+
         public void Stop()
         {
             follow_action.Dispose();
