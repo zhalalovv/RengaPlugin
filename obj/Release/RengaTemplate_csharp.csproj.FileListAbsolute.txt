@@ -1,0 +1,10 @@
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Release\RengaTemplate_csharp.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Release\RengaTemplate_csharp.pdb
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Release\Renga.NET.PluginUtility.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTemplate_csharp.csproj.AssemblyReference.cache
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\Interop.Renga.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTemplate_csharp.csproj.ResolveComReference.cache
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTemplate_csharp.csproj.CoreCompileInputs.cache
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTem.FA9EE5E2.Up2Date
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTemplate_csharp.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Release\RengaTemplate_csharp.pdb
