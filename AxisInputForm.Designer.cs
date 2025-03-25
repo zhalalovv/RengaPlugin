@@ -10,8 +10,10 @@ namespace RengaTemplate_csharp
         private Label label3;
         private TextBox textBoxX;
         private TextBox textBoxY;
-        private TextBox textBoxLevels;
+        private ComboBox comboBoxLevels;
         private Button buttonOK;
+        private TableLayoutPanel tableLayoutPanel;
+
 
         private void InitializeComponent()
         {
@@ -20,82 +22,79 @@ namespace RengaTemplate_csharp
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxX = new System.Windows.Forms.TextBox();
             this.textBoxY = new System.Windows.Forms.TextBox();
-            this.textBoxLevels = new System.Windows.Forms.TextBox();
+            this.comboBoxLevels = new System.Windows.Forms.ComboBox();
             this.buttonOK = new System.Windows.Forms.Button();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
-            // 
+
+            // tableLayoutPanel
+            this.tableLayoutPanel.ColumnCount = 2;
+            this.tableLayoutPanel.RowCount = 4;
+            this.tableLayoutPanel.Dock = DockStyle.Fill;
+            this.tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+            this.tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            this.tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            this.tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            this.tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            this.tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            this.tableLayoutPanel.Padding = new Padding(10);
+
             // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Axis X";
-            // 
+            this.label1.Text = "Axis X:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.Dock = DockStyle.Fill;
+
             // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 41);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Axis Y";
-            // 
+            this.label2.Text = "Axis Y:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label2.Dock = DockStyle.Fill;
+
             // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 67);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Levels";
-            // 
+            this.label3.Text = "Levels:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label3.Dock = DockStyle.Fill;
+
             // textBoxX
-            // 
-            this.textBoxX.Location = new System.Drawing.Point(53, 12);
-            this.textBoxX.Name = "textBoxX";
-            this.textBoxX.Size = new System.Drawing.Size(200, 20);
-            this.textBoxX.TabIndex = 3;
-            // 
+            this.textBoxX.Dock = DockStyle.Fill;
+            this.textBoxX.Margin = new Padding(5);
+
             // textBoxY
-            // 
-            this.textBoxY.Location = new System.Drawing.Point(53, 38);
-            this.textBoxY.Name = "textBoxY";
-            this.textBoxY.Size = new System.Drawing.Size(200, 20);
-            this.textBoxY.TabIndex = 4;
-            // 
-            // textBoxLevels
-            // 
-            this.textBoxLevels.Location = new System.Drawing.Point(53, 64);
-            this.textBoxLevels.Name = "textBoxLevels";
-            this.textBoxLevels.Size = new System.Drawing.Size(200, 20);
-            this.textBoxLevels.TabIndex = 5;
-            // 
+            this.textBoxY.Dock = DockStyle.Fill;
+            this.textBoxY.Margin = new Padding(5);
+
+            // comboBoxLevels
+            this.comboBoxLevels.Dock = DockStyle.Fill;
+            this.comboBoxLevels.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxLevels.Margin = new Padding(5);
+
             // buttonOK
-            // 
-            this.buttonOK.Location = new System.Drawing.Point(178, 90);
-            this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 6;
             this.buttonOK.Text = "OK";
-            this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Dock = DockStyle.Fill;
+            this.buttonOK.Margin = new Padding(5);
+            this.buttonOK.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonOK.BackColor = System.Drawing.Color.DodgerBlue;
+            this.buttonOK.ForeColor = System.Drawing.Color.White;
+            this.buttonOK.FlatStyle = FlatStyle.Flat;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
-            // 
+
+            // Добавляем элементы в таблицу
+            this.tableLayoutPanel.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.textBoxX, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.textBoxY, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.label3, 0, 2);
+            this.tableLayoutPanel.Controls.Add(this.comboBoxLevels, 1, 2);
+            this.tableLayoutPanel.Controls.Add(this.buttonOK, 0, 3);
+            this.tableLayoutPanel.SetColumnSpan(this.buttonOK, 2); // Кнопка занимает всю ширину
+
             // AxisInputForm
-            // 
-            this.ClientSize = new System.Drawing.Size(265, 125);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.textBoxLevels);
-            this.Controls.Add(this.textBoxY);
-            this.Controls.Add(this.textBoxX);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(320, 180);
+            this.Controls.Add(this.tableLayoutPanel);
             this.Name = "AxisInputForm";
+            this.Text = "Enter Axis Data";
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
     }
 }
-
