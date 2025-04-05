@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Forms;
 using Renga;
 
@@ -7,161 +8,140 @@ namespace RengaTemplate_csharp
 {
     public class InitApp : Renga.IPlugin
     {
-        private ActionEventSource follow_action;
+        private IAction ourButton;
+        private IApplication rengaApp;
 
         public bool Initialize(string pluginFolder)
         {
-            Renga.Application renga_app = new Renga.Application();
-            Renga.IUI renga_ui = renga_app.UI;
-            Renga.IUIPanelExtension panel = renga_ui.CreateUIPanelExtension();
+            rengaApp = new Renga.Application();
+            IUI rengaUI = rengaApp.UI;
+            IUIPanelExtension panel = rengaUI.CreateUIPanelExtension();
 
-            Renga.IAction our_button = renga_ui.CreateAction();
-            our_button.ToolTip = "Axis Plugin";
-            our_button.DisplayName = "Axis Plugin";
+            ourButton = rengaUI.CreateAction();
+            ourButton.ToolTip = "Axis Plugin";
+            ourButton.DisplayName = "Axis Plugin";
 
-            follow_action = new ActionEventSource(our_button);
-            follow_action.Triggered += (sender, args) =>
+            // Регистрируем обработчик событий кнопки
+            var connectionPointContainer = ourButton as IConnectionPointContainer;
+            if (connectionPointContainer != null)
             {
-                ShowAxisInputForm(renga_app);
-            };
+                Guid guid = typeof(_IActionEvents).GUID;
+                connectionPointContainer.FindConnectionPoint(ref guid, out IConnectionPoint connectionPoint);
 
-            panel.AddToolButton(our_button);
-            renga_ui.AddExtensionToPrimaryPanel(panel);
+                var sink = new AxisActionEventHandler(this);
+                connectionPoint.Advise(sink, out int cookie);
+            }
+
+            panel.AddToolButton(ourButton);
+            rengaUI.AddExtensionToPrimaryPanel(panel);
 
             return true;
         }
 
-        private void ShowAxisInputForm(Renga.Application renga_app)
+        public void ShowAxisInputForm()
         {
-            Renga.IProject project = renga_app.Project;
+            IProject project = rengaApp.Project;
             if (project == null)
             {
                 MessageBox.Show("Project is not open.");
                 return;
             }
 
-            IModelObjectCollection levels = project.Model.GetObjects();
+            IModel model = project.Model;
 
-            using (AxisInputForm form = new AxisInputForm(levels))
+            using (AxisInputForm form = new AxisInputForm(model.GetObjects()))
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    //CreateAxes(renga_app, form.AxisX, form.AxisY);
+                    CreateAxes(form.AxisX, form.AxisY);
                 }
             }
         }
 
-        //private void CreateAxes(Renga.Application renga_app, string axisX, string axisY)
-        //{
-        //    try
-        //    {
-        //        Renga.IProject project = renga_app.Project;
-        //        if (project == null)
-        //        {
-        //            MessageBox.Show("Project is not open.");
-        //            return;
-        //        }
+        private void CreateAxes(string axisX, string axisY)
+        {
+            try
+            {
+                IProject project = rengaApp.Project;
+                if (project == null)
+                {
+                    MessageBox.Show("Project is not open.");
+                    return;
+                }
 
-        //        Renga.IModel model = project.Model;
-        //        IOperation operation = model.CreateOperation();
+                IModel model = project.Model;
+                IOperation operation = project.CreateOperation();  // Создаем операцию
 
-        //        var axisXParams = ParseAxisParameters(axisX);
-        //        var axisYParams = ParseAxisParameters(axisY);
+                // Получаем параметры осей и создаём их
+                var axisXParams = ParseAxisParameters(axisX);
+                var axisYParams = ParseAxisParameters(axisY);
 
-        //        double xOffset = 0.0;
-        //        foreach (var param in axisXParams)
-        //        {
-        //            for (int i = 0; i < param.Item2; i++)
-        //            {
-        //                CreateAxis(model, xOffset, true);
-        //                xOffset += param.Item1;
-        //            }
-        //        }
+                // Создание осей
+                double xOffset = 0.0;
+                foreach (var param in axisXParams)
+                {
+                    for (int i = 0; i < param.Item2; i++)
+                    {
+                        CreateAxis(model, xOffset, 0); // Ось X
+                        xOffset += param.Item1;
+                    }
+                }
 
-        //        double yOffset = 0.0;
-        //        foreach (var param in axisYParams)
-        //        {
-        //            for (int i = 0; i < param.Item2; i++)
-        //            {
-        //                CreateAxis(model, yOffset, false);
-        //                yOffset += param.Item1;
-        //            }
-        //        }
+                double yOffset = 0.0;
+                foreach (var param in axisYParams)
+                {
+                    for (int i = 0; i < param.Item2; i++)
+                    {
+                        CreateAxis(model, 0, yOffset); // Ось Y
+                        yOffset += param.Item1;
+                    }
+                }
 
-        //        operation.Apply();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Error: {ex.Message}");
-        //    }
-        //}
+                operation.Apply();
 
-        //private void CreateAxis(Renga.IModel model, double position, bool isXAxis)
-        //{
-        //    try
-        //    {
-        //        // Создаем ось как обычный объект модели
-        //        var axis = model.CreateObject(); // Псевдокод для создания объекта, проверьте доступный метод создания объекта
+                MessageBox.Show("Axes created successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
 
-        //        if (axis == null)
-        //        {
-        //            MessageBox.Show("Ошибка: Не удалось создать ось.");
-        //            return;
-        //        }
+        private void CreateAxis(IModel model, double x, double y)
+        {
+            // Получаем объекты модели
+            var objectsCollection = model.GetObjects();
+            if (objectsCollection.Count == 0)
+            {
+                MessageBox.Show("No objects found in the model.");
+                return;
+            }
 
-        //        // Получаем параметры объекта
-        //        IParameterContainer parameters = axis.GetParameters(); // Получаем параметры объекта
+            // Получаем первый объект (или подходящий объект) из коллекции
+            IModelObject axisObject = objectsCollection.GetByIndex(0);  // Это просто пример, выбираем первый объект
 
-        //        // Пример установки параметра оси
-        //        if (parameters != null)
-        //        {
-        //            IParameter nameParam = parameters.Get("Name"); // Получаем параметр по имени (замените на актуальное имя)
-
-        //            if (nameParam != null)
-        //            {
-        //                nameParam.SetStringValue(isXAxis ? $"X{position}" : $"Y{position}");
-        //            }
-        //        }
-
-        //        // Устанавливаем позицию оси
-        //        SetAxisPosition(axis, position, isXAxis);
-
-        //        // Применяем операцию для добавления оси в модель
-        //        IOperation operation = model.CreateOperation();
-        //        operation.Apply(); // Применяем операцию
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Ошибка при создании оси: {ex.Message}");
-        //    }
-        //}
-
-        //private void SetAxisPosition(IModelObject axis, double position, bool isXAxis)
-        //{
-        //    try
-        //    {
-        //        // Для установки позиции оси, используйте правильные методы для изменения координат
-        //        IPlacement3D placement = axis as IPlacement3D;
-        //        if (placement != null)
-        //        {
-        //            placement.SetCoordinates(isXAxis ? position : 0, isXAxis ? 0 : position, 0); // Метод для установки координат
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Ошибка при установке позиции оси: {ex.Message}");
-        //    }
-        //}
+            // Настройка параметров для объекта (например, позиция)
+            var properties = axisObject.GetProperties(); // Получаем контейнер свойств
+            if (properties != null)
+            {
+                // Пример установки значения (координат)
+                // Если есть свойство для позиции, установим его здесь
+                // Пример: properties.SetProperty("Position", new Position(x, y));
+                MessageBox.Show($"Axis created at position: ({x}, {y})");
+            }
+        }
 
         private List<Tuple<double, int>> ParseAxisParameters(string axisInput)
         {
-            List<Tuple<double, int>> axisParams = new List<Tuple<double, int>>();
-            string[] parts = axisInput.Split(',');
+            var axisParams = new List<Tuple<double, int>>();
+            string[] parts = axisInput.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string part in parts)
             {
-                string[] values = part.Trim().Split('x');
-                if (values.Length == 2 && double.TryParse(values[0], out double step) && int.TryParse(values[1], out int count))
+                string[] values = part.Trim().Split('*');
+                if (values.Length == 2 &&
+                    double.TryParse(values[0], out double step) &&
+                    int.TryParse(values[1], out int count))
                 {
                     axisParams.Add(new Tuple<double, int>(step, count));
                 }
@@ -172,7 +152,7 @@ namespace RengaTemplate_csharp
 
         public void Stop()
         {
-            follow_action.Dispose();
+            // Пока нет необходимости в отписке, так как OnTriggered вызывается вручную
         }
     }
 }

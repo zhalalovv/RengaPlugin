@@ -85,7 +85,7 @@ namespace RengaTemplate_csharp
             this.tableLayoutPanel.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel.Controls.Add(this.comboBoxLevels, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.buttonOK, 0, 3);
-            this.tableLayoutPanel.SetColumnSpan(this.buttonOK, 2); // Кнопка занимает всю ширину
+            this.tableLayoutPanel.SetColumnSpan(this.buttonOK, 1);
 
             // AxisInputForm
             this.ClientSize = new System.Drawing.Size(320, 180);

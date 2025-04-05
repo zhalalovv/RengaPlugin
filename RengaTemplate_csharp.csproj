@@ -54,6 +54,7 @@
     <Compile Include="AxisInputForm.Designer.cs">
       <DependentUpon>AxisInputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AxisActionEventHandler.cs" />
     <Compile Include="init_app.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
