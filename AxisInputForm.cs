@@ -27,12 +27,19 @@ namespace RengaTemplate_csharp
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            if (comboBoxLevels.SelectedItem == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите уровень перед продолжением.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             AxisX = textBoxX.Text;
             AxisY = textBoxY.Text;
             SelectedLevel = ((ComboBoxItem)comboBoxLevels.SelectedItem).Value;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
 
         private class ComboBoxItem
         {

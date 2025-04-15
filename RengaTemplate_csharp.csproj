@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <RengaSDKPath>C:\Program Files\Renga\SDK</RengaSDKPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,7 +35,11 @@
   <ItemGroup>
     <Reference Include="Renga.NET.PluginUtility, Version=2.39.18140.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>G:\RengaSDK\Net\Renga.NET.PluginUtility.dll</HintPath>
+      <HintPath>$(RengaSDKPath)\Net\Renga.NET.PluginUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Renga.NET, Version=2.39.18140.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(RengaSDKPath)\Net\Renga.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

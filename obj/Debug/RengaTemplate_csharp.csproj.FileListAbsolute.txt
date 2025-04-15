@@ -7,7 +7,6 @@ C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Debug\
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Debug\RengaTem.FA9EE5E2.Up2Date
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Debug\RengaTemplate_csharp.dll
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Debug\RengaTemplate_csharp.pdb
-C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\Renga.NET.PluginUtility.dll
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\logo.png
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\Interop.Renga.dll
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\stdole.dll
