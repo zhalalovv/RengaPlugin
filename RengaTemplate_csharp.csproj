@@ -53,13 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AxisInputForm.cs">
+    <Compile Include="DoorWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AxisInputForm.Designer.cs">
-      <DependentUpon>AxisInputForm.cs</DependentUpon>
+    <Compile Include="DoorWindowForm.Designer.cs">
+      <DependentUpon>DoorWindowForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AxisActionEventHandler.cs" />
     <Compile Include="init_app.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,13 +70,17 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>G:\RengaSDK\tlb\RengaCOMAPI.tlb</HintPath>
     </COMReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RengaPlugin_csharp.rndesc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

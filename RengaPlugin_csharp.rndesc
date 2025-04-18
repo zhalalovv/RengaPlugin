@@ -1,0 +1,9 @@
+﻿<RengaPlugin>
+	<Name>Sample Plugin</Name>
+	<Version>1.0</Version>
+	<Copyright>Copyright text</Copyright>
+	<RequiredAPIVersion>2.30</RequiredAPIVersion>
+	<PluginType>net</PluginType>
+	<PluginFilename>C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\RengaTemplate_csharp.dll</PluginFilename>
+	<Vendor>-</Vendor>
+</RengaPlugin>
