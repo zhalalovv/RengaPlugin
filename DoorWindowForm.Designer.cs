@@ -14,9 +14,8 @@ namespace RengaPlugin
         private System.Windows.Forms.TextBox textBoxWidth;
         private System.Windows.Forms.TextBox textBoxHeight;
         private System.Windows.Forms.TextBox textBoxOffset;
-        private System.Windows.Forms.Button buttonSave;
-        private System.Windows.Forms.Button buttonDelete;
-        private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnAdd;
 
         protected override void Dispose(bool disposing)
         {
@@ -35,9 +34,8 @@ namespace RengaPlugin
             this.textBoxWidth = new System.Windows.Forms.TextBox();
             this.textBoxHeight = new System.Windows.Forms.TextBox();
             this.textBoxOffset = new System.Windows.Forms.TextBox();
-            this.buttonSave = new System.Windows.Forms.Button();
-            this.buttonDelete = new System.Windows.Forms.Button();
-            this.buttonAdd = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxParams
@@ -108,27 +106,19 @@ namespace RengaPlugin
             // 
             // buttonSave
             // 
-            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSave.Location = new System.Drawing.Point(12, 370);
-            this.buttonSave.Size = new System.Drawing.Size(90, 30);
-            this.buttonSave.Text = "Сохранить";
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // buttonDelete
-            // 
-            this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonDelete.Location = new System.Drawing.Point(114, 370);
-            this.buttonDelete.Size = new System.Drawing.Size(90, 30);
-            this.buttonDelete.Text = "Удалить";
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSave.Location = new System.Drawing.Point(12, 370);
+            this.btnSave.Size = new System.Drawing.Size(90, 30);
+            this.btnSave.Text = "Сохранить";
+            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonAdd.Location = new System.Drawing.Point(216, 370);
-            this.buttonAdd.Size = new System.Drawing.Size(90, 30);
-            this.buttonAdd.Text = "Добавить";
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAdd.Location = new System.Drawing.Point(216, 370);
+            this.btnAdd.Size = new System.Drawing.Size(90, 30);
+            this.btnAdd.Text = "Добавить";
+            this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
             // DoorWindowForm
             // 
@@ -143,12 +133,12 @@ namespace RengaPlugin
             this.Controls.Add(this.textBoxHeight);
             this.Controls.Add(this.labelOffset);
             this.Controls.Add(this.textBoxOffset);
-            this.Controls.Add(this.buttonSave);
-            this.Controls.Add(this.buttonDelete);
-            this.Controls.Add(this.buttonAdd);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnAdd);
             this.Text = "Параметры дверей и окон";
             this.ResumeLayout(false);
             this.PerformLayout();
         }
     }
 }
+

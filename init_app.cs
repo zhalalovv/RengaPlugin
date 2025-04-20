@@ -1,6 +1,4 @@
-﻿using System;
-using Renga;
-using System.Windows.Forms;
+﻿using Renga;
 
 namespace RengaPlugin
 {
