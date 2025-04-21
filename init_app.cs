@@ -25,7 +25,7 @@ namespace RengaPlugin
             follow_action.Triggered += (sender, args) =>
             {
                 // Создаем форму сразу при запуске плагина
-                _form = new DoorWindowForm(); // Вы можете передать параметры, если нужно
+                _form = new DoorWindowForm(_app); // Вы можете передать параметры, если нужно
 
                 // Показываем форму
                 _form.ShowDialog();

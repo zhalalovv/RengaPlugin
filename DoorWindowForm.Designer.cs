@@ -46,7 +46,7 @@ namespace RengaPlugin
             this.listBoxParams.FormattingEnabled = true;
             this.listBoxParams.Location = new System.Drawing.Point(12, 12);
             this.listBoxParams.Size = new System.Drawing.Size(360, 160);
-            this.listBoxParams.SelectedIndexChanged += new System.EventHandler(this.listBoxParams_SelectedIndexChanged);
+            //this.listBoxParams.SelectedIndexChanged += new System.EventHandler(this.listBoxParams_SelectedIndexChanged);
             // 
             // comboBoxType
             // 
@@ -110,21 +110,21 @@ namespace RengaPlugin
             this.btnSave.Location = new System.Drawing.Point(12, 370);
             this.btnSave.Size = new System.Drawing.Size(90, 30);
             this.btnSave.Text = "Сохранить";
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // buttonAdd
             // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(216, 370);
-            this.btnAdd.Size = new System.Drawing.Size(90, 30);
-            this.btnAdd.Text = "Добавить";
-            this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
+            //this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            //this.btnAdd.Location = new System.Drawing.Point(216, 370);
+            //this.btnAdd.Size = new System.Drawing.Size(90, 30);
+            //this.btnAdd.Text = "Добавить";
+            //this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
             // DoorWindowForm
             // 
             this.ClientSize = new System.Drawing.Size(384, 411);
             this.MinimumSize = new System.Drawing.Size(400, 450);
-            this.MaximumSize = new System.Drawing.Size(400, 450);
+            this.MaximumSize = new System.Drawing.Size(700, 450);
             this.Controls.Add(this.listBoxParams);
             this.Controls.Add(this.comboBoxType);
             this.Controls.Add(this.labelWidth);

@@ -7,146 +7,106 @@ namespace RengaPlugin
 {
     public partial class DoorWindowForm : Form
     {
-        private IProject project;
-        private IModel model;
-        private List<IModelObject> doorWindowObjects = new List<IModelObject>();
+        private readonly IModel _model;
+        private readonly IApplication _app;
+        private readonly List<string> _savedItems;
+        private int? _savedObjectId;
 
-        public DoorWindowForm(IProject rengaProject)
+        public DoorWindowForm(IApplication app)
         {
             InitializeComponent();
-            project = rengaProject;
-            model = project.Model;
+
+            _app = app;
+            _model = app.Project.Model;
+            _savedItems = new List<string>();
+
+            btnSave.Click += SaveButton_Click;
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
+        private IModelObject FindObjectById(int id)
         {
-            if (listBoxParams.SelectedItem is IModelObject selectedObj)
+            try
             {
-                double width = Convert.ToDouble(textBoxWidth.Text);
-                double height = Convert.ToDouble(textBoxHeight.Text);
-                double offset = Convert.ToDouble(textBoxOffset.Text);
-
-                UpdateElement(selectedObj, width, height, offset);
+                IModelObjectCollection modelObjects = _model.GetObjects();
+                return modelObjects.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при получении объекта: " + ex.Message);
+                return null;
             }
         }
 
-        private void BtnAdd_Click(object sender, EventArgs e)
-        {
-            double width = Convert.ToDouble(textBoxWidth.Text);
-            double height = Convert.ToDouble(textBoxHeight.Text);
-            double offset = Convert.ToDouble(textBoxOffset.Text);
 
-            string selectedType = comboBoxType.SelectedItem?.ToString();
-            if (selectedType == "Окно")
-                AddNewElementToProject("Окно", width, height, offset);
-            else if (selectedType == "Дверь")
-                AddNewElementToProject("Дверь", width, height, offset);
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            var selection = _app.Selection;
+            object selectedObjects = selection.GetSelectedObjects();
+
+            // Преобразуем SAFEARRAY в обычный массив int[]
+            int[] selectedIds = ConvertToIntArray(selectedObjects);
+
+            if (selectedIds == null || selectedIds.Length != 1)
+            {
+                MessageBox.Show("Пожалуйста, выберите одну дверь или окно.");
+                return;
+            }
+
+            var objectId = selectedIds[0];
+            _savedObjectId = objectId;
+
+            // Получаем объект из модели
+            var element = FindObjectById(objectId);
+            if (element == null)
+            {
+                MessageBox.Show("Не удалось получить элемент.");
+                return;
+            }
+
+            string typeName;
+            double width = 0, height = 0, offset = 0;
+            Point3D position;
+
+            if (element is IDoorParams door)
+            {
+                typeName = "Дверь";
+                width = door.Width;
+                height = door.Height;
+                offset = door.VerticalOffset;
+                position = door.Position;
+            }
+            else if (element is IWindowParams window)
+            {
+                typeName = "Окно";
+                width = window.Width;
+                height = window.Height;
+                offset = window.VerticalOffset;
+                position = window.Position;
+            }
             else
-                MessageBox.Show("Выберите тип элемента: Окно или Дверь.");
-        }
-
-        private void AddNewElementToProject(string type, double width, double height, double offset)
-        {
-            IElementType elementType = null;
-
-            // Ищем подходящий тип элемента (окно или дверь)
-            foreach (IElementType et in model.GetElementTypes())  // Понять, как работать с типами в твоей версии Renga
             {
-                string name = et.Name.ToLower();
-                if ((type == "Дверь" && name.Contains("дверь")) ||
-                    (type == "Окно" && name.Contains("окно")))
-                {
-                    elementType = et;
-                    break;
-                }
-            }
-
-            if (elementType == null)
-            {
-                MessageBox.Show($"Тип {type} не найден.");
+                MessageBox.Show("Выбранный объект не является дверью или окном.");
                 return;
             }
 
-            IOperation op = project.CreateOperation();
-            op.Start();
+            string info = $"{typeName}: Ширина={width:0.##}, Высота={height:0.##}, Позиция=({position.X:0.##}; {position.Y:0.##}; {position.Z:0.##}), Offset={offset:0.##}";
+            _savedItems.Add(info);
+            listBoxParams.Items.Add(info);
 
-            // Создание нового объекта
-            IModelObject obj = model.CreateObject(elementType.Id);  // Убедись, что метод CreateObject существует
-            if (obj == null)
+            // Снять выделение после сохранения
+            selection.SetSelectedObjects(new int[0]);
+        }
+
+        private int[] ConvertToIntArray(object selectedObjects)
+        {
+            if (selectedObjects is Array safeArray)
             {
-                op.RollBack();  // Убедись, что RollBack существует
-                MessageBox.Show("Не удалось создать объект.");
-                return;
+                int[] result = new int[safeArray.Length];
+                Array.Copy(safeArray, result, safeArray.Length);
+                return result;
             }
-
-            // Установка параметров нового объекта
-            SetElementParams(obj, width, height, offset);
-
-            model.AddObject(obj);  // Убедись, что AddObject существует
-            op.Apply();
-
-            // Добавление объекта в список
-            doorWindowObjects.Add(obj);
-            listBoxParams.Items.Add(obj);
-        }
-
-        private void UpdateElement(IModelObject obj, double width, double height, double offset)
-        {
-            IOperation op = project.CreateOperation();
-            op.Start();
-
-            SetElementParams(obj, width, height, offset);
-
-            op.Apply();
-        }
-
-        private void SetElementParams(IModelObject obj, double width, double height, double offset)
-        {
-            IParameterContainer parameters = obj as IParameterContainer;
-            if (parameters == null)
-                return;
-
-            SetParameter(parameters, "Width", width);
-            SetParameter(parameters, "Height", height);
-            SetParameter(parameters, "VerticalOffset", offset);
-
-            // Позиционирование — смещение по X (смотри, как правильно работать с Placement в Renga)
-            IPlacement placement = obj.Placement;  // Проверь работу с Placement
-            if (placement != null)
-            {
-                IPoint3D origin = placement.GetCoordinateSystem().Origin;  // Проверь, как правильно работать с координатами
-                origin.X = offset;
-                placement.GetCoordinateSystem().Origin = origin;
-                obj.Placement = placement;
-            }
-        }
-
-        private void SetParameter(IParameterContainer container, string name, double value)
-        {
-            IParameter param = container.GetParameter(name);
-            if (param != null && param.Value is IDoubleParameterValue doubleVal)
-                doubleVal.Value = value;
-        }
-
-        private void listBoxParams_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxParams.SelectedItem is IModelObject obj)
-            {
-                IParameterContainer parameters = obj as IParameterContainer;
-
-                textBoxWidth.Text = GetParameterValue(parameters, "Width");
-                textBoxHeight.Text = GetParameterValue(parameters, "Height");
-                textBoxOffset.Text = GetParameterValue(parameters, "VerticalOffset");
-            }
-        }
-
-        private string GetParameterValue(IParameterContainer container, string name)
-        {
-            IParameter param = container?.GetParameter(name);
-            if (param != null && param.Value is IDoubleParameterValue doubleVal)
-                return doubleVal.Value.ToString("F2");
-
-            return "";
+            return null;
         }
     }
 }
