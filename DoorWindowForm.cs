@@ -13,7 +13,7 @@ namespace RengaPlugin
         private readonly IApplication _app;
         private readonly List<string> _savedItems;
         private int? _savedObjectId;
-        private readonly string _filePath = "savedItems.json"; // Путь к файлу для хранения данных
+        private readonly string _filePath = "savedItems.json";
 
         public DoorWindowForm(IApplication app, List<string> savedItems)
         {
@@ -23,10 +23,20 @@ namespace RengaPlugin
             _model = app.Project.Model;
             _savedItems = savedItems;
 
-            // Загружаем данные из файла при открытии формы
             LoadSavedItems();
 
+            UpdateListBox();
+
             btnSave.Click += SaveButton_Click;
+        }
+
+        private void UpdateListBox()
+        {
+            listBoxParams.Items.Clear();
+            foreach (var item in _savedItems)
+            {
+                listBoxParams.Items.Add(item);
+            }
         }
 
         // Метод для загрузки сохранённых данных из JSON-файла
@@ -38,10 +48,14 @@ namespace RengaPlugin
                 {
                     var savedData = File.ReadAllText(_filePath);
                     var items = JsonConvert.DeserializeObject<List<string>>(savedData);
+
                     foreach (var item in items)
                     {
-                        _savedItems.Add(item);
-                        listBoxParams.Items.Add(item);
+                        if (!_savedItems.Contains(item))
+                        {
+                            _savedItems.Add(item);
+                            listBoxParams.Items.Add(item);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -117,10 +131,17 @@ namespace RengaPlugin
             }
 
             string info = $"{typeName}: Ширина={width}, Высота={height}, Позиция=({position.X}; {position.Y}; {position.Z}), Offset={offset}";
+
+            // Проверка
+            if (_savedItems.Contains(info))
+            {
+                MessageBox.Show("Этот объект уже сохранён.");
+                return;
+            }
+
             _savedItems.Add(info);
             listBoxParams.Items.Add(info);
 
-            // Сохраняем данные в JSON
             SaveItemsToFile();
 
             // Снять выделение после сохранения

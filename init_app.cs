@@ -44,5 +44,18 @@ namespace RengaPlugin
             follow_action.Dispose();
         }
 
+        private void RunForm()
+        {
+            if (_form == null || _form.IsDisposed)
+            {
+                // Передаём уже существующий список, если нужно
+                List<string> savedItems = new List<string>(); // или можно загружать заранее
+                _form = new DoorWindowForm(_app, savedItems);
+            }
+
+            _form.Show();
+            _form.BringToFront();
+        }
+
     }
 }
