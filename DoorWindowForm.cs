@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 using System.Windows.Forms;
 using Renga;
 
@@ -11,33 +13,57 @@ namespace RengaPlugin
         private readonly IApplication _app;
         private readonly List<string> _savedItems;
         private int? _savedObjectId;
+        private readonly string _filePath = "savedItems.json"; // Путь к файлу для хранения данных
 
-        public DoorWindowForm(IApplication app)
+        public DoorWindowForm(IApplication app, List<string> savedItems)
         {
             InitializeComponent();
 
             _app = app;
             _model = app.Project.Model;
-            _savedItems = new List<string>();
+            _savedItems = savedItems;
+
+            // Загружаем данные из файла при открытии формы
+            LoadSavedItems();
 
             btnSave.Click += SaveButton_Click;
         }
 
-        private IModelObject FindObjectById(int id)
+        // Метод для загрузки сохранённых данных из JSON-файла
+        private void LoadSavedItems()
         {
-            try
+            if (File.Exists(_filePath))
             {
-                IModelObjectCollection modelObjects = _model.GetObjects();
-                return modelObjects.GetById(id);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка при получении объекта: " + ex.Message);
-                return null;
+                try
+                {
+                    var savedData = File.ReadAllText(_filePath);
+                    var items = JsonConvert.DeserializeObject<List<string>>(savedData);
+                    foreach (var item in items)
+                    {
+                        _savedItems.Add(item);
+                        listBoxParams.Items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при загрузке данных: " + ex.Message);
+                }
             }
         }
 
-
+        // Метод для сохранения данных в JSON-файл
+        private void SaveItemsToFile()
+        {
+            try
+            {
+                var jsonData = JsonConvert.SerializeObject(_savedItems, Formatting.Indented);
+                File.WriteAllText(_filePath, jsonData);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при сохранении данных: " + ex.Message);
+            }
+        }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
@@ -90,9 +116,12 @@ namespace RengaPlugin
                 return;
             }
 
-            string info = $"{typeName}: Ширина={width:0.##}, Высота={height:0.##}, Позиция=({position.X:0.##}; {position.Y:0.##}; {position.Z:0.##}), Offset={offset:0.##}";
+            string info = $"{typeName}: Ширина={width}, Высота={height}, Позиция=({position.X}; {position.Y}; {position.Z}), Offset={offset}";
             _savedItems.Add(info);
             listBoxParams.Items.Add(info);
+
+            // Сохраняем данные в JSON
+            SaveItemsToFile();
 
             // Снять выделение после сохранения
             selection.SetSelectedObjects(new int[0]);
@@ -108,5 +137,107 @@ namespace RengaPlugin
             }
             return null;
         }
+
+        private IModelObject FindObjectById(int id)
+        {
+            try
+            {
+                IModelObjectCollection modelObjects = _model.GetObjects();
+                return modelObjects.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при получении объекта: " + ex.Message);
+                return null;
+            }
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            //if (listBoxParams.SelectedItem == null)
+            //{
+            //    MessageBox.Show("Выберите параметр из списка.");
+            //    return;
+            //}
+
+            //string selectedText = listBoxParams.SelectedItem.ToString();
+            //bool isWindow = selectedText.StartsWith("Окно");
+            //bool isDoor = selectedText.StartsWith("Дверь");
+
+            //if (!isWindow && !isDoor)
+            //{
+            //    MessageBox.Show("Неверный формат строки.");
+            //    return;
+            //}
+
+            //try
+            //{
+            //    double width = ParseDouble(selectedText, "Ширина=");
+            //    double height = ParseDouble(selectedText, "Высота=");
+            //    double offset = ParseDouble(selectedText, "Offset=");
+            //    Point3D position = ParsePosition(selectedText);
+
+            //    // Создаем аргументы создания
+            //    INewEntityArgs newArgs = null;
+            //    _project.CreateNewEntityArgs(out newArgs);
+
+            //    // Устанавливаем тип объекта
+            //    newArgs.SetObjectType(isWindow ? "Window" : "Door");
+
+            //    // Получаем размещение
+            //    IPlacement3D placement = null;
+            //    newArgs.GetPlacement3D(out placement);
+
+            //    placement.SetOrigin(position.X, position.Y, position.Z);
+            //    placement.SetAxisX(1, 0, 0);
+            //    placement.SetAxisY(0, 1, 0);
+
+            //    // Создаем объект
+            //    IModelObject modelObject;
+            //    _project.CreateObject(newArgs, out modelObject);
+
+            //    if (isDoor && modelObject is IDoorParams door)
+            //    {
+            //        door.put_Width(width);
+            //        door.put_Height(height);
+            //        door.put_VerticalOffset(offset);
+            //    }
+            //    else if (isWindow && modelObject is IWindowParams window)
+            //    {
+            //        window.put_Width(width);
+            //        window.put_Height(height);
+            //        window.put_VerticalOffset(offset);
+            //    }
+
+            //    MessageBox.Show($"{(isWindow ? "Окно" : "Дверь")} добавлено в модель.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Ошибка при добавлении: " + ex.Message);
+            //}
+        }
+
+
+        //private double ParseDouble(string source, string key)
+        //{
+        //    int start = source.IndexOf(key) + key.Length;
+        //    int end = source.IndexOf(",", start);
+        //    if (end == -1) end = source.Length;
+        //    string value = source.Substring(start, end - start);
+        //    return double.Parse(value.Trim());
+        //}
+
+        //private Point3D ParsePosition(string source)
+        //{
+        //    int start = source.IndexOf("Позиция=(") + "Позиция=(".Length;
+        //    int end = source.IndexOf(")", start);
+        //    string[] parts = source.Substring(start, end - start).Split(';');
+        //    return new Point3D
+        //    {
+        //        X = double.Parse(parts[0]),
+        //        Y = double.Parse(parts[1]),
+        //        Z = double.Parse(parts[2])
+        //    };
+        //}
     }
 }

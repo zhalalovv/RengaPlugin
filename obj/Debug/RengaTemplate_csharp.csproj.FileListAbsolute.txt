@@ -10,3 +10,5 @@ C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\obj\Debug\
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\logo.png
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\Interop.Renga.dll
 C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\stdole.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\zhala\source\repos\RengaTemplate_csharp\RengaTemplate_csharp\bin\Debug\Newtonsoft.Json.xml

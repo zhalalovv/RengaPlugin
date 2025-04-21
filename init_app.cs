@@ -1,4 +1,5 @@
 ﻿using Renga;
+using System.Collections.Generic;
 
 namespace RengaPlugin
 {
@@ -7,6 +8,7 @@ namespace RengaPlugin
         private Renga.ActionEventSource follow_action;
         private IApplication _app;
         private DoorWindowForm _form;
+        private List<string> _savedItems = new List<string>();
 
         public bool Initialize(string pluginFolder)
         {
@@ -25,7 +27,7 @@ namespace RengaPlugin
             follow_action.Triggered += (sender, args) =>
             {
                 // Создаем форму сразу при запуске плагина
-                _form = new DoorWindowForm(_app); // Вы можете передать параметры, если нужно
+                _form = new DoorWindowForm(_app, _savedItems); // Вы можете передать параметры, если нужно
 
                 // Показываем форму
                 _form.ShowDialog();
