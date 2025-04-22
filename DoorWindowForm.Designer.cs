@@ -9,6 +9,7 @@ namespace RengaPlugin
         private System.Windows.Forms.ListBox listBoxParams;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnDel;
 
         protected override void Dispose(bool disposing)
         {
@@ -22,6 +23,7 @@ namespace RengaPlugin
             this.listBoxParams = new System.Windows.Forms.ListBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.btnDel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxParams
@@ -47,6 +49,13 @@ namespace RengaPlugin
             this.btnAdd.Size = new System.Drawing.Size(90, 30);
             this.btnAdd.Text = "Добавить";
             // 
+            // buttonAdd
+            //
+            this.btnDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDel.Location = new System.Drawing.Point(210, 180);
+            this.btnDel.Size = new System.Drawing.Size(90, 30);
+            this.btnDel.Text = "Удалить";
+            // 
             // DoorWindowForm
             // 
             this.ClientSize = new System.Drawing.Size(384, 260);
@@ -55,6 +64,7 @@ namespace RengaPlugin
             this.Controls.Add(this.listBoxParams);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.btnDel);
             this.Text = "Параметры дверей и окон";
             this.ResumeLayout(false);
             this.PerformLayout();

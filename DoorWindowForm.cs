@@ -28,6 +28,8 @@ namespace RengaPlugin
             UpdateListBox();
 
             btnSave.Click += SaveButton_Click;
+            btnDel.Click += DeleteButton_Click;
+
         }
 
         private void UpdateListBox()
@@ -260,5 +262,28 @@ namespace RengaPlugin
         //        Z = double.Parse(parts[2])
         //    };
         //}
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            // Проверка: выбран ли элемент в ListBox
+            if (listBoxParams.SelectedItem == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите элемент для удаления.");
+                return;
+            }
+
+            // Получаем выбранный элемент
+            string selectedItem = listBoxParams.SelectedItem.ToString();
+
+            // Удаляем из сохранённого списка
+            _savedItems.Remove(selectedItem);
+
+            // Удаляем из ListBox
+            listBoxParams.Items.Remove(selectedItem);
+
+            // Обновляем JSON-файл
+            SaveItemsToFile();
+        }
+
     }
 }
