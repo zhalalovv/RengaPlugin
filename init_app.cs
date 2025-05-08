@@ -1,61 +1,22 @@
 ﻿using Renga;
-using System.Collections.Generic;
 
-namespace RengaPlugin
+namespace AutoSaveRengaPlugin
 {
-    public class InitApp : Renga.IPlugin
+    public class InitApp : IPlugin
     {
-        private Renga.ActionEventSource follow_action;
-        private IApplication _app;
-        private DoorWindowForm _form;
-        private List<string> _savedItems = new List<string>();
+        private AutoSavePlugin _plugin;
 
         public bool Initialize(string pluginFolder)
         {
-            _app = new Renga.Application();
-
-            IUI renga_ui = _app.UI;
-            IUIPanelExtension panel = renga_ui.CreateUIPanelExtension();
-
-            // Создаем кнопку для активации плагина
-            IAction our_button = renga_ui.CreateAction();
-            our_button.ToolTip = "Test plugin";
-            our_button.DisplayName = "Start Test Message Box";
-
-            // Событие нажатия на кнопку
-            follow_action = new ActionEventSource(our_button);
-            follow_action.Triggered += (sender, args) =>
-            {
-                // Создаем форму сразу при запуске плагина
-                _form = new DoorWindowForm(_app, _savedItems); // Вы можете передать параметры, если нужно
-
-                // Показываем форму
-                _form.ShowDialog();
-            };
-
-            panel.AddToolButton(our_button);
-            renga_ui.AddExtensionToPrimaryPanel(panel);
-
+            var rengaApp = new Renga.Application();
+            _plugin = new AutoSavePlugin();
+            _plugin.Init(rengaApp);
             return true;
         }
 
         public void Stop()
         {
-            follow_action.Dispose();
+            _plugin?.Stop();
         }
-
-        private void RunForm()
-        {
-            if (_form == null || _form.IsDisposed)
-            {
-                // Передаём уже существующий список, если нужно
-                List<string> savedItems = new List<string>(); // или можно загружать заранее
-                _form = new DoorWindowForm(_app, savedItems);
-            }
-
-            _form.Show();
-            _form.BringToFront();
-        }
-
     }
 }
